@@ -17,3 +17,20 @@ def test_apply_discount(item):
     item.pay_rate = 0.8
     item.apply_discount()
     assert item.price == 8000.0
+
+
+def test_name_setter(item):
+    item.name = 'Телефон'
+    assert item.name == 'Телефон'
+    item.name = 'СуперСмартфон'
+    assert item.name == 'Телефон'
+
+
+def test_instantiate_from_csv(item):
+    item.instantiate_from_csv()
+    assert len(item.all) == 5
+    assert item.all[0].name == 'Смартфон'
+
+
+def test_string_to_number(item):
+    assert isinstance(item.string_to_number(item.quantity), int)
