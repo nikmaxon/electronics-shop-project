@@ -28,7 +28,9 @@ class Item:
         return f'{self.name}'
 
     def __add__(self, other):
-        return self.quantity + other.quantity
+        if not isinstance(other, Item):
+            raise ValueError('Складывать можно только объекты Item и дочерние от них.')
+        return int(self.quantity + other.quantity)
 
     @property
     def name(self):

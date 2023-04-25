@@ -23,3 +23,5 @@ def test_add(phone):
 
 def test_setter(phone):
     assert phone.number_of_sim == 2
+    phone.number_of_sim = 0
+    assert phone.number_of_sim == ValueError
