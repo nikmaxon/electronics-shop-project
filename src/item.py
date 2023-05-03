@@ -8,6 +8,7 @@ class Item:
     """
     pay_rate = 1.0
     all = []
+    file_name = 'items.csv'
 
     def __init__(self, name: str, price: float, quantity: int) -> None:
         """
@@ -46,10 +47,18 @@ class Item:
 
     @classmethod
     def instantiate_from_csv(cls):
-        with open('../src/items.csv', encoding='windows-1251') as f:
-            reader = csv.DictReader(f)
-            for word in reader:
-                cls.all.append(cls(word['name'], word['price'], word['quantity']))
+        try:
+            with open(f'../src/{cls.file_name}', encoding='windows-1251') as f:
+                reader = csv.DictReader(f)
+                if len(list(csv.reader(f))[0]) != 3:
+                    raise InstantiateCSVError(f'Файл {cls.file_name} поврежден')
+                f.seek(0)
+                for word in reader:
+                    cls.all.append(cls(word['name'], word['price'], word['quantity']))
+        except FileNotFoundError:
+            raise FileNotFoundError(f'Отсутствует файл {cls.file_name}')
+        except PermissionError:
+            print(f'Невозможно создать файл {cls.file_name}')
 
     @staticmethod
     def string_to_number(number):
@@ -69,3 +78,7 @@ class Item:
         Применяет установленную скидку для конкретного товара.
         """
         self.price = self.price * self.pay_rate
+
+
+class InstantiateCSVError(Exception):
+    pass

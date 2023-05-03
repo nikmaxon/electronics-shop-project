@@ -1,5 +1,5 @@
 import pytest
-from src.item import Item
+from src.item import Item, InstantiateCSVError
 
 """Здесь надо написать тесты с использованием pytest для модуля item."""
 
@@ -42,3 +42,15 @@ def test_instantiate_from_csv(item):
 
 def test_string_to_number(item):
     assert isinstance(item.string_to_number(item.quantity), int)
+
+
+def test_exception_instantiate_from_csv():
+    Item.file_name = '123'
+    with pytest.raises(FileNotFoundError) as e:
+        Item.instantiate_from_csv()
+    assert str(e.value) == f'Отсутствует файл {Item.file_name}'
+
+    Item.file_name = 'items_test.csv'
+    with pytest.raises(InstantiateCSVError) as e:
+        Item.instantiate_from_csv()
+    assert str(e.value) == f'Файл {Item.file_name} поврежден'
